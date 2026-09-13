@@ -1,1 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stage 1 Contract</title>
+</head>
 
+<body>
+  <main>
+    <h1>Stage 1 Analytical Contract</h1>
+
+    <p id="version">Loading current contract...</p>
+
+    <textarea
+      id="contractText"
+      rows="40"
+      style="width: 100%;"
+    ></textarea>
+
+    <br><br>
+
+    <button id="saveButton">
+      Save as New Version
+    </button>
+
+    <p id="status"></p>
+  </main>
+
+  <script>
+    async function loadContract() {
+      const response = await fetch('/api/contract');
+      const contract = await response.json();
+
+      document.getElementById('version').textContent =
+        `Current version: ${contract.version}`;
+
+      document.getElementById('contractText').value =
+        contract.contract_text;
+    }
+
+    async function saveContract() {
+      const contractText =
+        document.getElementById('contractText').value;
+
+      document.getElementById('status').textContent =
+        'Saving...';
+
+      const response = await fetch('/api/contract', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          contract_text: contractText
+        })
+      });
+
+      const result = await response.json();
+
+      document.getElementById('version').textContent =
+        `Current version: ${result.version}`;
+
+      document.getElementById('status').textContent =
+        'Saved as a new version.';
+    }
+
+    document
+      .getElementById('saveButton')
+      .addEventListener('click', saveContract);
+
+    loadContract();
+  </script>
+</body>
+</html>
