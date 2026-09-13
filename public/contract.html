@@ -40,29 +40,53 @@
     }
 
     async function saveContract() {
+      const saveButton =
+        document.getElementById('saveButton');
+
+      const status =
+        document.getElementById('status');
+
       const contractText =
         document.getElementById('contractText').value;
 
-      document.getElementById('status').textContent =
-        'Saving...';
+      saveButton.disabled = true;
+      status.textContent = 'Saving...';
 
-      const response = await fetch('/api/contract', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          contract_text: contractText
-        })
-      });
+      try {
+        const response = await fetch('/api/contract', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            contract_text: contractText
+          })
+        });
 
-      const result = await response.json();
+        const result = await response.json();
 
-      document.getElementById('version').textContent =
-        `Current version: ${result.version}`;
+        if (!response.ok) {
+          throw new Error(
+            result.error || 'Failed to save contract.'
+          );
+        }
 
-      document.getElementById('status').textContent =
-        'Saved as a new version.';
+        document.getElementById('version').textContent =
+          `Current version: ${result.version}`;
+
+        if (result.unchanged) {
+          status.textContent =
+            'No changes to save. Current version remains unchanged.';
+        } else {
+          status.textContent =
+            `Saved successfully as Version ${result.version}.`;
+        }
+      } catch (error) {
+        status.textContent =
+          `Error: ${error.message}`;
+      } finally {
+        saveButton.disabled = false;
+      }
     }
 
     document
