@@ -1,1 +1,16 @@
-
+{
+  "case_id": "TEST001",
+  "language": "English",
+  "transcript": [
+    {
+      "turn": 1,
+      "speaker": "interviewer",
+      "text": "How would you describe your sleeping habits?"
+    },
+    {
+      "turn": 2,
+      "speaker": "interviewee",
+      "text": "I usually go to bed late because I keep working in the evening."
+    }
+  ]
+}
