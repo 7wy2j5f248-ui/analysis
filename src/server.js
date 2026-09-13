@@ -46,12 +46,24 @@ app.post('/api/contract', async (req, res) => {
       });
     }
 
+    const current = await getCurrentStage1Contract();
+
+    if (contractText === current.contract_text) {
+      return res.json({
+        ...current,
+        unchanged: true
+      });
+    }
+
     const saved = await saveStage1Contract(contractText);
 
     const savedRow =
       Array.isArray(saved) ? saved[0] : saved;
 
-    res.json(savedRow);
+    res.json({
+      ...savedRow,
+      unchanged: false
+    });
   } catch (error) {
     console.error(error);
 
