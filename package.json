@@ -5,5 +5,9 @@
   "type": "module",
   "scripts": {
     "analyze": "node src/run-analysis.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.116.0",
+    "express": "^5.2.1"
   }
 }
