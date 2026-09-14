@@ -5,6 +5,11 @@ import { fileURLToPath } from 'url';
 import { getCurrentStage1Contract } from './contracts.js';
 import { saveStage1Contract } from './save-contract.js';
 
+import {
+  getCurrentAIModelConfiguration,
+  saveAIModelConfiguration
+} from './model-configurations.js';
+
 const app = express();
 const port = 3000;
 
@@ -19,6 +24,11 @@ app.use(
   )
 );
 
+
+// --------------------------------------------------
+// CONTRACT
+// --------------------------------------------------
+
 app.get('/api/contract', async (req, res) => {
   try {
     const contract = await getCurrentStage1Contract();
@@ -32,6 +42,7 @@ app.get('/api/contract', async (req, res) => {
     });
   }
 });
+
 
 app.post('/api/contract', async (req, res) => {
   try {
@@ -55,7 +66,8 @@ app.post('/api/contract', async (req, res) => {
       });
     }
 
-    const saved = await saveStage1Contract(contractText);
+    const saved =
+      await saveStage1Contract(contractText);
 
     const savedRow =
       Array.isArray(saved) ? saved[0] : saved;
@@ -72,6 +84,69 @@ app.post('/api/contract', async (req, res) => {
     });
   }
 });
+
+
+// --------------------------------------------------
+// AI MODEL CONFIGURATION
+// --------------------------------------------------
+
+app.get(
+  '/api/model-config/:purpose',
+  async (req, res) => {
+    try {
+      const configuration =
+        await getCurrentAIModelConfiguration(
+          req.params.purpose
+        );
+
+      res.json(configuration);
+    } catch (error) {
+      console.error(error);
+
+      res.status(500).json({
+        error:
+          'Failed to load AI model configuration.'
+      });
+    }
+  }
+);
+
+
+app.post(
+  '/api/model-config/:purpose',
+  async (req, res) => {
+    try {
+      const {
+        provider_key,
+        model,
+        model_settings
+      } = req.body;
+
+      const saved =
+        await saveAIModelConfiguration({
+          purpose: req.params.purpose,
+          providerKey: provider_key,
+          model,
+          modelSettings: model_settings ?? {}
+        });
+
+      res.json(saved);
+    } catch (error) {
+      console.error(error);
+
+      res.status(500).json({
+        error:
+          error.message ||
+          'Failed to save AI model configuration.'
+      });
+    }
+  }
+);
+
+
+// --------------------------------------------------
+// SERVER
+// --------------------------------------------------
 
 app.listen(port, () => {
   console.log(
