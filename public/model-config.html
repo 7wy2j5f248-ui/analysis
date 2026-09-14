@@ -1,572 +1,251 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI Model Configuration</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: Arial, sans-serif;
       background: #f5f7fa;
       color: #1f2937;
+      margin: 0;
     }
 
-    .page {
-      width: min(1100px, calc(100% - 40px));
+    main {
+      max-width: 900px;
       margin: 40px auto;
+      padding: 0 20px;
     }
 
-    h1 {
-      margin-bottom: 8px;
-    }
-
-    .intro {
-      margin-top: 0;
-      margin-bottom: 32px;
-      color: #4b5563;
-      line-height: 1.5;
-    }
-
-    .provider-panel,
-    .configuration {
+    section {
       background: white;
       border: 1px solid #dbe1e8;
-      border-radius: 12px;
+      border-radius: 10px;
       padding: 24px;
       margin-bottom: 24px;
     }
 
-    .provider-panel h2,
-    .configuration h2 {
-      margin-top: 0;
-    }
-
-    .providers {
-      display: grid;
-      grid-template-columns: repeat(
-        auto-fit,
-        minmax(260px, 1fr)
-      );
-      gap: 16px;
-    }
-
-    .provider-card {
-      border: 1px solid #dbe1e8;
-      border-radius: 10px;
-      padding: 18px;
-    }
-
-    .provider-card h3 {
-      margin-top: 0;
-      margin-bottom: 8px;
-    }
-
-    .provider-card p {
-      margin: 0;
-      color: #4b5563;
-      line-height: 1.5;
-    }
-
-    .description {
-      color: #4b5563;
-      line-height: 1.5;
-      margin-bottom: 22px;
-    }
-
-    .field {
-      margin-bottom: 18px;
-    }
-
     label {
       display: block;
-      font-weight: 600;
-      margin-bottom: 7px;
+      font-weight: bold;
+      margin-top: 16px;
+      margin-bottom: 6px;
     }
 
     select,
     input {
       width: 100%;
-      padding: 11px 12px;
-      border: 1px solid #cbd5e1;
-      border-radius: 7px;
+      box-sizing: border-box;
+      padding: 10px;
       font-size: 15px;
-      background: white;
-    }
-
-    select:focus,
-    input:focus {
-      outline: 2px solid #94a3b8;
-      outline-offset: 1px;
-    }
-
-    .help {
-      margin-top: 6px;
-      font-size: 13px;
-      color: #64748b;
     }
 
     button {
-      padding: 11px 18px;
-      border: 0;
-      border-radius: 7px;
+      margin-top: 18px;
+      padding: 10px 16px;
       font-size: 15px;
       cursor: pointer;
-      background: #1f2937;
-      color: white;
     }
 
-    button:hover {
-      opacity: 0.9;
-    }
-
-    button:disabled {
-      opacity: 0.55;
-      cursor: default;
-    }
-
+    .current,
     .status {
-      padding: 14px 16px;
-      border-radius: 8px;
+      margin-top: 16px;
+      padding: 12px;
       background: #eef2f7;
-      color: #475569;
-      margin-top: 20px;
-      line-height: 1.5;
+      border-radius: 6px;
     }
 
-    .status.success {
+    .success {
       background: #ecfdf5;
       color: #166534;
     }
 
-    .status.error {
+    .error {
       background: #fef2f2;
       color: #991b1b;
-    }
-
-    .current {
-      margin-bottom: 20px;
-      padding: 14px 16px;
-      border-radius: 8px;
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      line-height: 1.5;
-    }
-
-    .current strong {
-      display: block;
-      margin-bottom: 4px;
     }
   </style>
 </head>
 
 <body>
-
-  <main class="page">
+  <main>
 
     <h1>AI Model Configuration</h1>
 
-    <p class="intro">
+    <p>
       Configure the researcher-designated AI separately
-      for interviewing and data analysis. Each function
-      can use its own provider and model.
+      for interviewing and data analysis.
     </p>
 
-
-    <section class="provider-panel">
-
+    <section>
       <h2>Available Providers</h2>
-
-      <div class="providers">
-
-        <div class="provider-card">
-          <h3>OpenAI</h3>
-
-          <p>
-            Available for researcher-selected interviewing
-            and data-analysis configurations.
-          </p>
-        </div>
-
-        <div class="provider-card">
-          <h3>Google</h3>
-
-          <p>
-            Available for researcher-selected interviewing
-            and data-analysis configurations.
-          </p>
-        </div>
-
-      </div>
-
+      <p>OpenAI</p>
+      <p>Google</p>
     </section>
 
 
-    <section class="configuration">
-
+    <section>
       <h2>Interviewing</h2>
 
-      <p class="description">
-        Select the provider and model that will conduct
-        interviews.
-      </p>
+      <div id="interview-current" class="current">
+        Loading current configuration...
+      </div>
 
-      <div
-        class="current"
-        id="interview-current"
+      <label for="interview-provider">Provider</label>
+      <select id="interview-provider">
+        <option value="">Select provider</option>
+        <option value="openai">OpenAI</option>
+        <option value="google">Google</option>
+      </select>
+
+      <label for="interview-model">Model</label>
+      <input
+        id="interview-model"
+        type="text"
+        placeholder="Enter exact provider model ID"
       >
-        <strong>Current configuration</strong>
-        Loading...
-      </div>
 
-
-      <div class="field">
-
-        <label for="interview-provider">
-          Provider
-        </label>
-
-        <select id="interview-provider">
-          <option value="">
-            Select provider
-          </option>
-
-          <option value="openai">
-            OpenAI
-          </option>
-
-          <option value="google">
-            Google
-          </option>
-        </select>
-
-      </div>
-
-
-      <div class="field">
-
-        <label for="interview-model">
-          Model
-        </label>
-
-        <input
-          id="interview-model"
-          type="text"
-          placeholder="Enter exact provider model ID"
-          autocomplete="off"
-        />
-
-        <div class="help">
-          Enter the exact model ID designated for
-          interviewing.
-        </div>
-
-      </div>
-
-
-      <button
-        type="button"
-        id="save-interview"
-      >
+      <button id="save-interview">
         Save Interviewing Configuration
       </button>
 
-
-      <div
-        class="status"
-        id="interview-status"
-      >
+      <div id="interview-status" class="status">
         Ready.
       </div>
-
     </section>
 
 
-    <section class="configuration">
-
+    <section>
       <h2>Data Analysis</h2>
 
-      <p class="description">
-        Select the provider and model that will perform
-        data analysis.
-      </p>
+      <div id="analysis-current" class="current">
+        Loading current configuration...
+      </div>
 
-      <div
-        class="current"
-        id="analysis-current"
+      <label for="analysis-provider">Provider</label>
+      <select id="analysis-provider">
+        <option value="">Select provider</option>
+        <option value="openai">OpenAI</option>
+        <option value="google">Google</option>
+      </select>
+
+      <label for="analysis-model">Model</label>
+      <input
+        id="analysis-model"
+        type="text"
+        placeholder="Enter exact provider model ID"
       >
-        <strong>Current configuration</strong>
-        Loading...
-      </div>
 
-
-      <div class="field">
-
-        <label for="analysis-provider">
-          Provider
-        </label>
-
-        <select id="analysis-provider">
-          <option value="">
-            Select provider
-          </option>
-
-          <option value="openai">
-            OpenAI
-          </option>
-
-          <option value="google">
-            Google
-          </option>
-        </select>
-
-      </div>
-
-
-      <div class="field">
-
-        <label for="analysis-model">
-          Model
-        </label>
-
-        <input
-          id="analysis-model"
-          type="text"
-          placeholder="Enter exact provider model ID"
-          autocomplete="off"
-        />
-
-        <div class="help">
-          Enter the exact model ID designated for
-          data analysis.
-        </div>
-
-      </div>
-
-
-      <button
-        type="button"
-        id="save-analysis"
-      >
+      <button id="save-analysis">
         Save Data Analysis Configuration
       </button>
 
-
-      <div
-        class="status"
-        id="analysis-status"
-      >
+      <div id="analysis-status" class="status">
         Ready.
       </div>
-
     </section>
 
   </main>
 
 
   <script>
+    const configs = {
+      interviewing: {
+        provider: document.getElementById("interview-provider"),
+        model: document.getElementById("interview-model"),
+        current: document.getElementById("interview-current"),
+        status: document.getElementById("interview-status"),
+        button: document.getElementById("save-interview")
+      },
 
-    const interviewing = {
-      purpose: "interviewing",
-      provider:
-        document.getElementById(
-          "interview-provider"
-        ),
-      model:
-        document.getElementById(
-          "interview-model"
-        ),
-      saveButton:
-        document.getElementById(
-          "save-interview"
-        ),
-      current:
-        document.getElementById(
-          "interview-current"
-        ),
-      status:
-        document.getElementById(
-          "interview-status"
-        )
+      data_analysis: {
+        provider: document.getElementById("analysis-provider"),
+        model: document.getElementById("analysis-model"),
+        current: document.getElementById("analysis-current"),
+        status: document.getElementById("analysis-status"),
+        button: document.getElementById("save-analysis")
+      }
     };
 
 
-    const analysis = {
-      purpose: "data_analysis",
-      provider:
-        document.getElementById(
-          "analysis-provider"
-        ),
-      model:
-        document.getElementById(
-          "analysis-model"
-        ),
-      saveButton:
-        document.getElementById(
-          "save-analysis"
-        ),
-      current:
-        document.getElementById(
-          "analysis-current"
-        ),
-      status:
-        document.getElementById(
-          "analysis-status"
-        )
-    };
-
-
-    function providerName(providerKey) {
-
-      if (providerKey === "openai") {
-        return "OpenAI";
-      }
-
-      if (providerKey === "google") {
-        return "Google";
-      }
-
-      return providerKey;
+    function providerName(key) {
+      if (key === "openai") return "OpenAI";
+      if (key === "google") return "Google";
+      return key;
     }
 
 
-    function setStatus(
-      config,
-      message,
-      type = ""
-    ) {
-
-      config.status.textContent = message;
-
-      config.status.className = "status";
-
-      if (type) {
-        config.status.classList.add(type);
-      }
-    }
-
-
-    function showCurrent(
-      config,
-      saved
-    ) {
-
-      if (!saved) {
-
-        config.current.innerHTML =
-          "<strong>Current configuration</strong>" +
-          "No configuration saved.";
-
+    function showCurrent(config, data) {
+      if (!data) {
+        config.current.textContent =
+          "Current configuration: none saved.";
         return;
       }
 
-      const provider =
-        providerName(saved.provider_key);
-
       config.current.innerHTML =
-        "<strong>Current configuration</strong>" +
-        `Provider: ${provider}<br>` +
-        `Model: ${saved.model}<br>` +
-        `Version: ${saved.version}`;
+        `<strong>Current configuration</strong><br>` +
+        `Provider: ${providerName(data.provider_key)}<br>` +
+        `Model: ${data.model}<br>` +
+        `Version: ${data.version}`;
 
-      config.provider.value =
-        saved.provider_key;
-
-      config.model.value =
-        saved.model;
+      config.provider.value = data.provider_key;
+      config.model.value = data.model;
     }
 
 
-    async function loadConfiguration(
-      config
-    ) {
+    async function loadConfiguration(purpose) {
+      const config = configs[purpose];
 
       try {
-
         const response = await fetch(
-          `/api/model-config/${config.purpose}`
+          `/api/model-config/${purpose}`
         );
 
         if (!response.ok) {
-          throw new Error(
-            "Failed to load configuration."
-          );
+          throw new Error("Failed to load configuration.");
         }
 
-        const saved =
-          await response.json();
+        const data = await response.json();
 
-        showCurrent(
-          config,
-          saved
-        );
+        showCurrent(config, data);
 
       } catch (error) {
+        config.current.textContent =
+          "Unable to load current configuration.";
 
-        console.error(error);
-
-        config.current.innerHTML =
-          "<strong>Current configuration</strong>" +
-          "Unable to load configuration.";
-
-        setStatus(
-          config,
-          error.message,
-          "error"
-        );
+        config.status.textContent = error.message;
+        config.status.className = "status error";
       }
     }
 
 
-    async function saveConfiguration(
-      config
-    ) {
+    async function saveConfiguration(purpose) {
+      const config = configs[purpose];
 
-      const providerKey =
-        config.provider.value;
-
-      const model =
-        config.model.value.trim();
-
+      const providerKey = config.provider.value;
+      const model = config.model.value.trim();
 
       if (!providerKey || !model) {
-
-        setStatus(
-          config,
-          "Select a provider and enter a model ID.",
-          "error"
-        );
-
+        config.status.textContent =
+          "Select a provider and enter a model ID.";
+        config.status.className = "status error";
         return;
       }
 
-
-      config.saveButton.disabled = true;
-
-      setStatus(
-        config,
-        "Saving..."
-      );
-
+      config.button.disabled = true;
+      config.status.textContent = "Saving...";
+      config.status.className = "status";
 
       try {
-
         const response = await fetch(
-          `/api/model-config/${config.purpose}`,
+          `/api/model-config/${purpose}`,
           {
             method: "POST",
-
             headers: {
-              "Content-Type":
-                "application/json"
+              "Content-Type": "application/json"
             },
-
             body: JSON.stringify({
               provider_key: providerKey,
               model: model,
@@ -575,83 +254,49 @@
           }
         );
 
-
-        const result =
-          await response.json();
-
+        const result = await response.json();
 
         if (!response.ok) {
-
           throw new Error(
-            result.error ||
-            "Failed to save configuration."
+            result.error || "Failed to save configuration."
           );
         }
 
-
-        showCurrent(
-          config,
-          result
-        );
-
+        showCurrent(config, result);
 
         if (result.unchanged) {
-
-          setStatus(
-            config,
-            `No changes to save. ` +
-            `Current version remains ` +
-            `${result.version}.`,
-            "success"
-          );
-
+          config.status.textContent =
+            `No changes to save. Current version remains ${result.version}.`;
         } else {
-
-          setStatus(
-            config,
-            `Configuration saved as ` +
-            `version ${result.version}.`,
-            "success"
-          );
+          config.status.textContent =
+            `Configuration saved as version ${result.version}.`;
         }
 
+        config.status.className = "status success";
 
       } catch (error) {
-
-        console.error(error);
-
-        setStatus(
-          config,
-          error.message,
-          "error"
-        );
+        config.status.textContent = error.message;
+        config.status.className = "status error";
 
       } finally {
-
-        config.saveButton.disabled = false;
+        config.button.disabled = false;
       }
     }
 
 
-    interviewing.saveButton.addEventListener(
+    configs.interviewing.button.addEventListener(
       "click",
-      () => {
-        saveConfiguration(interviewing);
-      }
+      () => saveConfiguration("interviewing")
+    );
+
+    configs.data_analysis.button.addEventListener(
+      "click",
+      () => saveConfiguration("data_analysis")
     );
 
 
-    analysis.saveButton.addEventListener(
-      "click",
-      () => {
-        saveConfiguration(analysis);
-      }
-    );
-
-
-    loadConfiguration(interviewing);
-    loadConfiguration(analysis);
-
+    loadConfiguration("interviewing");
+    loadConfiguration("data_analysis");
   </script>
 
 </body>
