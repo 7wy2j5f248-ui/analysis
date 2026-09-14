@@ -10,6 +10,8 @@ import {
   saveAIModelConfiguration
 } from './model-configurations.js';
 
+import { getStage1Reports } from './stage1-reports.js';
+
 const app = express();
 const port = 3000;
 
@@ -143,7 +145,24 @@ app.post(
   }
 );
 
+// STAGE 1 REPORT
 
+app.get('/api/stage1-report', async (req, res) => {
+  try {
+    const reports = await getStage1Reports();
+
+    res.json({
+      count: reports.length,
+      reports
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      error: 'Failed to load Stage 1 reports.'
+    });
+  }
+});
 // --------------------------------------------------
 // SERVER
 // --------------------------------------------------
