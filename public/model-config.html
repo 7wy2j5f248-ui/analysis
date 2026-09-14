@@ -1,1 +1,359 @@
+cat > public/model-config.html <<'EOF'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <title>AI Model Configuration</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f5f7fa;
+      color: #1f2937;
+    }
+
+    .page {
+      width: min(1100px, calc(100% - 40px));
+      margin: 40px auto;
+    }
+
+    h1 {
+      margin-bottom: 8px;
+    }
+
+    .intro {
+      margin-top: 0;
+      margin-bottom: 32px;
+      color: #4b5563;
+      line-height: 1.5;
+    }
+
+    .provider-panel {
+      background: white;
+      border: 1px solid #dbe1e8;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 28px;
+    }
+
+    .provider-panel h2 {
+      margin-top: 0;
+      margin-bottom: 18px;
+    }
+
+    .providers {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .provider-card {
+      border: 1px solid #dbe1e8;
+      border-radius: 10px;
+      padding: 18px;
+    }
+
+    .provider-card h3 {
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+
+    .provider-card p {
+      margin: 0;
+      color: #4b5563;
+      line-height: 1.5;
+    }
+
+    .configuration {
+      background: white;
+      border: 1px solid #dbe1e8;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .configuration h2 {
+      margin-top: 0;
+    }
+
+    .description {
+      color: #4b5563;
+      line-height: 1.5;
+      margin-bottom: 22px;
+    }
+
+    .field {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 7px;
+    }
+
+    select,
+    input {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 7px;
+      font-size: 15px;
+      background: white;
+    }
+
+    select:focus,
+    input:focus {
+      outline: 2px solid #94a3b8;
+      outline-offset: 1px;
+    }
+
+    .help {
+      margin-top: 6px;
+      font-size: 13px;
+      color: #64748b;
+    }
+
+    .status {
+      padding: 14px 16px;
+      border-radius: 8px;
+      background: #eef2f7;
+      color: #475569;
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 11px 18px;
+      border: 0;
+      border-radius: 7px;
+      font-size: 15px;
+      cursor: pointer;
+      background: #1f2937;
+      color: white;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+
+    <h1>AI Model Configuration</h1>
+
+    <p class="intro">
+      Configure the researcher-designated AI separately for interviewing
+      and data analysis. Each function may use a different provider,
+      model, and model-specific settings.
+    </p>
+
+
+    <section class="provider-panel">
+
+      <h2>Available Providers</h2>
+
+      <div class="providers">
+
+        <div class="provider-card">
+          <h3>OpenAI</h3>
+          <p>
+            Available for researcher-selected interviewing and
+            data-analysis configurations.
+          </p>
+        </div>
+
+        <div class="provider-card">
+          <h3>Google</h3>
+          <p>
+            Available for researcher-selected interviewing and
+            data-analysis configurations.
+          </p>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <section class="configuration">
+
+      <h2>Interviewing</h2>
+
+      <p class="description">
+        Select the provider and model that will conduct interviews.
+      </p>
+
+      <div class="field">
+        <label for="interview-provider">Provider</label>
+
+        <select id="interview-provider">
+          <option value="">Select provider</option>
+          <option value="openai">OpenAI</option>
+          <option value="google">Google</option>
+        </select>
+      </div>
+
+
+      <div class="field">
+        <label for="interview-model">Model</label>
+
+        <input
+          id="interview-model"
+          type="text"
+          placeholder="Enter provider model ID"
+          autocomplete="off"
+        />
+
+        <div class="help">
+          Enter the exact model ID designated for interviewing.
+        </div>
+      </div>
+
+
+      <button
+        type="button"
+        id="save-interview"
+      >
+        Save Interviewing Configuration
+      </button>
+
+      <div
+        class="status"
+        id="interview-status"
+      >
+        No configuration loaded.
+      </div>
+
+    </section>
+
+
+    <section class="configuration">
+
+      <h2>Data Analysis</h2>
+
+      <p class="description">
+        Select the provider and model that will perform data analysis.
+      </p>
+
+      <div class="field">
+        <label for="analysis-provider">Provider</label>
+
+        <select id="analysis-provider">
+          <option value="">Select provider</option>
+          <option value="openai">OpenAI</option>
+          <option value="google">Google</option>
+        </select>
+      </div>
+
+
+      <div class="field">
+        <label for="analysis-model">Model</label>
+
+        <input
+          id="analysis-model"
+          type="text"
+          placeholder="Enter provider model ID"
+          autocomplete="off"
+        />
+
+        <div class="help">
+          Enter the exact model ID designated for data analysis.
+        </div>
+      </div>
+
+
+      <button
+        type="button"
+        id="save-analysis"
+      >
+        Save Data Analysis Configuration
+      </button>
+
+      <div
+        class="status"
+        id="analysis-status"
+      >
+        No configuration loaded.
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <script>
+    const interviewing = {
+      provider: document.getElementById("interview-provider"),
+      model: document.getElementById("interview-model"),
+      saveButton: document.getElementById("save-interview"),
+      status: document.getElementById("interview-status")
+    };
+
+    const analysis = {
+      provider: document.getElementById("analysis-provider"),
+      model: document.getElementById("analysis-model"),
+      saveButton: document.getElementById("save-analysis"),
+      status: document.getElementById("analysis-status")
+    };
+
+
+    function describeSelection(config) {
+      const provider =
+        config.provider.options[config.provider.selectedIndex]?.text;
+
+      const model = config.model.value.trim();
+
+      if (!config.provider.value || !model) {
+        return null;
+      }
+
+      return {
+        provider,
+        providerKey: config.provider.value,
+        model
+      };
+    }
+
+
+    interviewing.saveButton.addEventListener("click", () => {
+      const selection = describeSelection(interviewing);
+
+      if (!selection) {
+        interviewing.status.textContent =
+          "Select a provider and enter a model ID.";
+        return;
+      }
+
+      interviewing.status.textContent =
+        `Selected: ${selection.provider} / ${selection.model}. ` +
+        `Database saving will be connected in the next step.`;
+    });
+
+
+    analysis.saveButton.addEventListener("click", () => {
+      const selection = describeSelection(analysis);
+
+      if (!selection) {
+        analysis.status.textContent =
+          "Select a provider and enter a model ID.";
+        return;
+      }
+
+      analysis.status.textContent =
+        `Selected: ${selection.provider} / ${selection.model}. ` +
+        `Database saving will be connected in the next step.`;
+    });
+  </script>
+
+</body>
+</html>
+EOF
